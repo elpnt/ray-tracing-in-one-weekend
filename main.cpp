@@ -40,14 +40,28 @@ int main() {
     vec3 origin(0.0, 0.0, 0.0);
 
     hitable* list[4];
+    // center sphere
     list[0] =
         new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.5, 0.5, 1.0)));
+    // ground
     list[1] = new sphere(vec3(0, -100.5, -1), 100,
-                         new lambertian(vec3(0.8, 0.8, 0.0)));
-    list[2] = new sphere(vec3(1, 0, -1), 0.5, new metal(vec3(0.8, 0.6, 0.2)));
-    list[3] = new sphere(vec3(-1, 0, -1), 0.5, new metal(vec3(0.8, 0.8, 0.8)));
+                         new lambertian(vec3(0.5, 0.5, 0.5)));
+    // metal sphere 1
+    list[2] = new sphere(vec3(1.2, 0, -1), 0.5, new metal(vec3(1, 1, 1), 0.0));
+    // metal sphere 2
+    list[3] =
+        new sphere(vec3(-1.2, 0, -1), 0.5, new metal(vec3(0.4, 0.1, 0.1), 0.2));
     hitable* world = new hitable_list(list, 4);
-    camera cam;
+
+    // camera setting
+    vec3 lookfrom(5, 5, 4);
+    vec3 lookat(0, 0, -1);
+    vec3 vup(0, 1, 0);
+    float vfov = 20;  // degree
+    float dist_to_focus = (lookfrom - lookat).length();
+    float aperture = 0.2;
+    camera cam(lookfrom, lookat, vup, vfov, float(nx) / float(ny), aperture,
+               dist_to_focus);
 
     for (int j = ny - 1; j >= 0; j--) {
         for (int i = 0; i < nx; i++) {

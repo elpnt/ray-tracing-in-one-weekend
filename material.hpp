@@ -32,7 +32,12 @@ class metal : public material {
     vec3 albedo;
     float fuzz;
 
-    metal(const vec3& a) : albedo(a) {}
+    metal(const vec3& a, float f) : albedo(a) {
+        if (f < 1)
+            fuzz = f;
+        else
+            fuzz = 1;
+    }
 
     virtual bool scatter(const ray& r_in, const hit_record& rec,
                          vec3& attenuation, ray& scattered) const {
